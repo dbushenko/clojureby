@@ -5,7 +5,7 @@
   [:div
    {:class "main-post"}
 
-   (doall (map #(vector :div (iframe-link-for (str (:date %) "&nbsp;" (:title %))
+   (doall (map #(vector :div (parent-link-for (str (:date %) "&nbsp;" (:title %))
                                               (:html-file-name %))
                         [:br])
                (page-posts)))
