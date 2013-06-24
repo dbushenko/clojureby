@@ -117,12 +117,13 @@
       {:class "feed"}
       [:div
        {:class "feed-header"}
-       "\n\t      ЛЕНТА\n\t      "
+       "\n\t      ЗАПИСЬ\n\t      "
        [:div {:class "line"}]]
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+      [:h2 (post-title)]
       (post-content)
 
           "<div id=\"disqus_thread\"></div>

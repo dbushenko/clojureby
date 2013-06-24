@@ -126,9 +126,11 @@
        "\n\t      ЛЕНТА\n\t      "
        [:div {:class "line"}]]
 
+      (let [news-post (first (posts-with-tag "news"))]
       [:div
        {:class "main-post"}
-       (:contents (first (posts-with-tag "news")))]
+       [:h2 (link-for (:title news-post) (:html-file-name news-post))]
+       (:contents news-post)])
 
       [:iframe {:src (url-for "news.html"),
                 :seamless "seamless",

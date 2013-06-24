@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version='2.0'>
+<channel>
+<generator>
+clj-rss
+</generator>
+<title>
+clojure.by
+</title>
+<link>
+http://clojure.by
+</link>
+<description>
+Clojure enthusiasts community
+</description>
+<item>
+<link>
+2013-06-24-inner-class.html
+</link>
+<title>
+Как импотировать внутренние java-классы
+</title>
+<pubDate>
+Пн, 24 июн 2013 00:00:00 +0300
+</pubDate>
+<description>
+&lt;p&gt;На текущем проекте понадобилось воспользоваться классом &lt;a href='http://javadoc.google-api-java-client.googlecode.com/hg/apis/plus/v1/com/google/api/services/plus/Plus.html'&gt;com.google.api.services.plus.Plus&lt;/a&gt; и его вложенным билдером -- com.google.api.services.plus.Plus.Builder. Оказалось, что импортировать вложенные классы нужно не так, как обычные. При компиляции вложенные java-классы именуются так: &lt;i&gt;родительский класс$вложенный класс.class&lt;/i&gt;. Поэтому импорт класса билдера выглядит так:&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;clojure&quot;&gt;
+...
+&amp;#40;import com.google.api.services.plus.Plus&amp;#41;
+&amp;#40;import com.google.api.services.plus.Plus$Builder&amp;#41;
+...
+&lt;/pre&gt;Автор: Д.Бушенко (d.bushenko@gmail.com)
+</description>
+</item>
+<item>
+<link>
+2013-06-23-lisp-hackers.html
+</link>
+<title>
+Бесплатная книга &quot;Lisp Hackers&quot;
+</title>
+<pubDate>
+Вс, 23 июн 2013 00:00:00 +0300
+</pubDate>
+<description>
+&lt;p&gt;Вышла бесплатная книга &quot;Lisp Hackers&quot; - сборник интервью известных лисперов Common Lisp'а.&lt;/p&gt;&lt;p&gt;&lt;a href='http://lisp-univ-etc.blogspot.com/2013/06/free-lisp-hackers-ebook.html'&gt;Оригинальная статья&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href='https://leanpub.com/lisphackers'&gt;Скачать&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Автор: Н.Белоглазов (nikelandjelo@gmail.com)&lt;/p&gt;
+</description>
+</item>
+<item>
+<link>
+stub1.html
+</link>
+<title>
+stub1
+</title>
+<pubDate>
+Сб, 22 июн 2013 00:00:00 +0300
+</pubDate>
+<description>
+&lt;p&gt;&lt;/p&gt;
+</description>
+</item>
+<item>
+<link>
+stub2.html
+</link>
+<title>
+stub2
+</title>
+<pubDate>
+Пт, 21 июн 2013 00:00:00 +0300
+</pubDate>
+<description>
+&lt;p&gt;&lt;/p&gt;
+</description>
+</item>
+</channel>
+</rss>

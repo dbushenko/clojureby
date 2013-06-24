@@ -1,6 +1,6 @@
-#title: Бесплатная книга "Lisp Hackers "
+#title: Бесплатная книга "Lisp Hackers"
 #tags: news other_lisps
-#date: 23-06-2013
+#date: 2013-06-23
 
 Вышла бесплатная книга "Lisp Hackers" - сборник интервью известных лисперов Common Lisp'а.
 
