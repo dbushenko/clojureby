@@ -74,8 +74,6 @@
          :class "past-meetup-more-link",
          :href (url-for "meetup.html")}
         "Больше..."]]]
-
-
      [:div
       {:class "tags"}
       [:h3 {:align "center", :class "pm-header"} "Теги"]
@@ -109,15 +107,11 @@
          [:a {:href (url-for "emacs_elisp.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Emacs &amp; EmacsLisp"]]]]
       
       ]
-     ]
 
+     ]
     [:section
 
      {:id "content"}
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-     (post-content)
 
      [:div
       {:class "feed"}
@@ -126,28 +120,27 @@
        "\n\t      ЛЕНТА\n\t      "
        [:div {:class "line"}]]
 
-      [:div
-       {:class "main-post"}
-       (:contents (first (posts-with-tag "news")))]
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-      [:iframe {:src (url-for "news.html"),
-                :seamless "seamless",
-                :width "520px",
-                ;; :height "200px",
-                :frameBorder "0"}]
-      ]
+      (post-content)
 
-     [:div
-      {:class "feed"}
-      [:div
-       {:class "info-header"}
-       "\n\t      ЧТО ТАКОЕ CLOJURE?\n\t      "
-       [:div {:class "line"}]]
+          "<div id=\"disqus_thread\"></div>
+    <script type=\"text/javascript\">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'clojureby'; // required: replace example with your forum shortname
 
-      "Clojure (произносится как closure) — современный диалект Лиспа. Это язык программирования общего назначения с поддержкой разработки в интерактивном режиме, поощряющий функциональное программирование, и упрощающий поддержку многопоточности. Clojure работает на платформах JVM, JavaScript и CLR. Clojure отличает философия «код как данные» и развитая система лисп-макросов."
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href=\"http://disqus.com/?ref_noscript\">comments powered by Disqus.</a></noscript>
+    <a href=\"http://disqus.com\" class=\"dsq-brlink\">comments powered by <span class=\"logo-disqus\">Disqus</span></a>"
 
-      ]
-     ]]
+      ]]]
 
    [:footer
     {:class "page-footer"}
@@ -163,6 +156,7 @@
      [:p {} [:strong {} "Clojure Enthusiasts Belarus"] ", 2013."]
      [:p {} "\n            Created by\n          "]
      [:p {} "Some rights reserved (c)."]]]
+
 
    (for [js-file ["//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"
                   "js/codemirror-with-clojure-compressed.js"

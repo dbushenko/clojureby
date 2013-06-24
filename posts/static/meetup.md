@@ -1,2 +1,2 @@
-#layout: default
+#layout: posts_layout
 
