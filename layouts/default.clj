@@ -13,10 +13,9 @@
     :content
     "Community of Clojure programming language users in Belarus. Коммьюнити пользователей языка программирования Clojure в Беларуси (Минск)"}]
   [:meta {:name "viewport", :content "width=device-width,initial-scale=1"}]
-  [:link
-   {:rel "stylesheet", :type "text/css", :media "all", :href "css/style.css"}]
-  [:link
-   {:rel "stylesheet", :type "text/css", :media "all", :href "css/prettify.css"}]]
+  (for [css-file ["style.css" "codemirror.css"]]
+    [:link
+     {:rel "stylesheet", :type "text/css", :media "all", :href (str "css/" css-file)}])]
  [:body
   {}
   [:div
@@ -123,8 +122,9 @@
      [:p {} "\n            Created by\n          "]
      [:p {} "Some rights reserved (c)."]]]
 
-   [:script {:src "https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"}]
-   ]
-    
-  
-  ]]
+
+   (for [js-file ["//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"
+                  "js/codemirror-with-clojure-compressed.js"
+                  "js/clojureby.js"]]
+     [:script {:src js-file}])
+   ]]]

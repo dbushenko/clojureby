@@ -671,3 +671,17 @@ div.dsq-trackback-url {
   p, h2, h3 { orphans: 3; widows: 3; }
   h2, h3 { page-break-after: avoid; }
 }
+
+
+/* Fixes for CodeMirror so it uses variable height. */
+
+#container .CodeMirror {
+    height: auto;
+    background-color: #f4f7f8;
+}
+
+.CodeMirror .CodeMirror-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: auto;
+}
