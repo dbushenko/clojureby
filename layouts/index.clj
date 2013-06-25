@@ -132,11 +132,8 @@
        [:h2 (link-for (:title news-post) (:html-file-name news-post))]
        (:contents news-post)])
 
-      [:iframe {:src (url-for "news.html"),
-                :seamless "seamless",
-                :width "520px",
-                ;; :height "200px",
-                :frameBorder "0"}]
+      [:br]
+      (inner-page "news.html" {:width "520px"})
       ]
 
      [:div
@@ -158,12 +155,12 @@
      [:div
       {:class "page-footer-button"}
       [:a
-       {:shape "rect", :href "http://clojure.by/rss.xml"}
+       {:shape "rect", :href (url-for "rss.xml")}
        [:img {:src "img/rss.png"}]]]]
     [:section
      {:class "copyright-info"}
      [:p {} [:strong {} "Clojure Enthusiasts Belarus"] ", 2013."]
-     [:p {} "\n            Created by\n          "]
+     [:p {} "\n            Created by Dmitry Bushenko (d.bushenko@gmail.com)\n          "]
      [:p {} "Some rights reserved (c)."]]]
 
    (for [js-file ["//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"

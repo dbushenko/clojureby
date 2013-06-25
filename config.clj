@@ -5,6 +5,7 @@
  :rss-title "clojure.by"
  :rss-link "http://clojure.by"
  :rss-description "Clojure enthusiasts community"
+ :rss-count 1
 
  ;; tags layouts
  :news "news_layout"
