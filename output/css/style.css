@@ -276,6 +276,8 @@ a:hover {
     text-decoration: underline; }
 .site-title .by {
     color: #079e07; }
+.site-title .clojure {
+    color: #586bbf; }
 
 #main {
     display: inline-block;
@@ -283,12 +285,16 @@ a:hover {
     margin: 0 auto; }
 #widgets {
     float: left;
-    width: 290px;
+    width: 250px;
     margin: 0 30px; }
 #content {
     float: left;
-    width: 540px;
+    width: 560px;
     margin-left: 20px; }
+
+#alien {
+    margin-top:-100px;
+    width: 100%; }
 
 .header {
     float: right; }
@@ -309,7 +315,7 @@ a:hover {
 
 .past-meetups {
     margin-top: -11px;
-    padding: 20px;
+    padding: 20px 15px 20px 15px;
     color: #fff;
     -moz-border-radius: 15px;
     border-radius: 15px;
