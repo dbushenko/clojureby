@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version='2.0'>
+<channel>
+<generator>
+clj-rss
+</generator>
+<title>
+clojure.by
+</title>
+<link>
+http://clojure.by
+</link>
+<description>
+Clojure enthusiasts community
+</description>
+<item>
+<link>
+2013-06-26-disassemble.html
+</link>
+<title>
+Байткод скомпилированных функций
+</title>
+<pubDate>
+Ср, 26 июн 2013 00:00:00 +0300
+</pubDate>
+<description>
+&lt;p&gt;В SLIME для Common Lisp есть классная фишка -- показать скомпилированный байткод. Поскольку выглядит он солидно, то его пихают и в книги, и в статьи, хотя пользы от него -- немного. У Clojure такой функциональности не было, и я решил добавить пару функций. Я сделал патч для nrepl.el, но примут его или нет -- не знаю, потому исходник функций привожу здесь.&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;common-lisp&quot;&gt;
+&amp;#40;defun nrepl-decompile &amp;#40;fn-name&amp;#41;
+  &amp;quot;Decompiles specified function into the java bytecode. Opens buffer &amp;#42;decompiled&amp;#42; with the result
+of decompilation, enables javap-mode on it.
+Input: fn-name in format 'my-namespace$my-function'. All dashes will be replaced with underscores,
+the dollar symbol will be escaped.&amp;quot;
+  &amp;#40;let&amp;#42; &amp;#40;&amp;#40;buf-name &amp;quot;&amp;#42;decompiled&amp;#42;&amp;quot;&amp;#41;
+	 &amp;#40;class-name
+	  &amp;#40;replace-regexp-in-string &amp;quot;-&amp;quot; &amp;quot;&amp;#95;&amp;quot; 
+				    &amp;#40;replace-regexp-in-string &amp;quot;\\$&amp;quot; &amp;quot;\\\\$&amp;quot; fn-name&amp;#41;&amp;#41;&amp;#41;
+	 &amp;#40;cmd &amp;#40;concat &amp;quot;javap -constants -v -c -classpath `lein classpath` &amp;quot; class-name&amp;#41;&amp;#41;
+	 &amp;#40;decompiled &amp;#40;shell-command-to-string cmd&amp;#41;&amp;#41;&amp;#41;
+    &amp;#40;with-current-buffer &amp;#40;get-buffer-create buf-name&amp;#41;
+      &amp;#40;point-min&amp;#41;
+      &amp;#40;insert decompiled&amp;#41;
+      &amp;#40;javap-mode&amp;#41;&amp;#41;
+    &amp;#40;display-buffer buf-name&amp;#41;&amp;#41;&amp;#41;
+
+&amp;#40;defun nrepl-decompile-func &amp;#40;fn-name&amp;#41;
+  &amp;quot;Asks for the function name in the current namespace and decompiles it.&amp;quot;
+  &amp;#40;interactive &amp;quot;sFunction: &amp;quot;&amp;#41;
+  &amp;#40;nrepl-decompile &amp;#40;concat &amp;#40;nrepl-current-ns&amp;#41; &amp;quot;$&amp;quot; fn-name&amp;#41;&amp;#41;&amp;#41;
+
+&amp;#40;defun nrepl-decompile-ns-func &amp;#40;fn-name&amp;#41;
+  &amp;quot;Asks for the function name in a specific namespace and decompiles it.&amp;quot;
+  &amp;#40;interactive &amp;quot;sNamespace/function: &amp;quot;&amp;#41;
+  &amp;#40;nrepl-decompile &amp;#40;concat &amp;#40;replace-regexp-in-string &amp;quot;\\\/&amp;quot; &amp;quot;$&amp;quot; fn-name&amp;#41;&amp;#41;&amp;#41;&amp;#41;
+&lt;p&gt;
+&lt;/pre&gt;&lt;/p&gt;&lt;p&gt;Для корректной работы функции &lt;i&gt;nrepl-decompile&lt;/i&gt; необходимо, чтобы был установлен javap-mode-плагин, а для &lt;i&gt;nrepl-decompile-func&lt;/i&gt; -- запущенный nrepl. Тогда можно сделать M-x nrepl-decompile-func, ввести имя функции, и откроется буфер с java-байткодом.&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;java&quot;&gt;
+Classfile /home/dim/clojure.by/clj-site/target/classes/clj&amp;#95;site/core$print&amp;#95;usage.class
+  Last modified 25.06.2013; size 861 bytes
+  MD5 checksum 5558aba56207ba636949db9981123105
+  Compiled from &amp;quot;core.clj&amp;quot;
+public final class clj&amp;#95;site.core$print&amp;#95;usage extends clojure.lang.AFunction
+  SourceFile: &amp;quot;core.clj&amp;quot;
+  SourceDebugExtension: null
+  minor version: 0
+  major version: 49
+  flags: ACC&amp;#95;PUBLIC, ACC&amp;#95;FINAL, ACC&amp;#95;SUPER
+Constant pool:
+   #1 = Utf8               clj&amp;#95;site/core$print&amp;#95;usage
+   #2 = Class              #1             //  clj&amp;#95;site/core$print&amp;#95;usage
+   #3 = Utf8               clojure/lang/AFunction
+   #4 = Class              #3             //  clojure/lang/AFunction
+   #5 = Utf8               core.clj
+   #6 = Utf8               const&amp;#95;&amp;#95;0
+   #7 = Utf8               Lclojure/lang/Var;
+   #8 = Utf8               &amp;lt;clinit&amp;gt;
+   #9 = Utf8               &amp;#40;&amp;#41;V
+  #10 = Utf8               clojure.core
+  #11 = String             #10            //  clojure.core
+  #12 = Utf8               println
+  #13 = String             #12            //  println
+  ...
+{
+  public static final clojure.lang.Var const&amp;#95;&amp;#95;0;
+    flags: ACC&amp;#95;PUBLIC, ACC&amp;#95;STATIC, ACC&amp;#95;FINAL
+
+    ...
+
+  public clj&amp;#95;site.core$print&amp;#95;usage&amp;#40;&amp;#41;;
+    flags: ACC&amp;#95;PUBLIC
+    Code:
+      stack=1, locals=1, args&amp;#95;size=1
+         0: aload&amp;#95;0       
+         1: invokespecial #26                 // Method clojure/lang/AFunction.&amp;quot;&amp;lt;init&amp;gt;&amp;quot;:&amp;#40;&amp;#41;V
+         4: return        
+      LineNumberTable:
+        line 70: 0
+
+	...
+}
+&lt;p&gt;
+&lt;/pre&gt;  &lt;/p&gt;&lt;p&gt;Автор: Д.Бушенко (d.bushenko@gmail.com)&lt;/p&gt;&lt;p&gt;&lt;/p&gt;
+</description>
+</item>
+</channel>
+</rss>

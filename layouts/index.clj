@@ -73,7 +73,44 @@
         {:shape "rect",
          :class "past-meetup-more-link",
          :href (url-for "meetup.html")}
-        "Больше..."]]]]
+        "Больше..."]]]
+
+
+     [:div
+      {:class "tags"}
+      [:h3 {:align "center", :class "pm-header"} "Теги"]
+
+      [:div
+       {:class "past-meetup clearfix"}
+       [:div
+        {:class "past-meetup-info"}
+        [:p {}
+         [:a {:href (url-for "clojure_tips.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Clojure tips &amp; tricks"]]]]
+
+      [:div
+       {:class "past-meetup clearfix"}
+       [:div
+        {:class "past-meetup-info"}
+        [:p {}
+         [:a {:href (url-for "clojure_web.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Clojure &amp; Web"]]]]
+
+      [:div
+       {:class "past-meetup clearfix"}
+       [:div
+        {:class "past-meetup-info"}
+        [:p {}
+         [:a {:href (url-for "other_lisps.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Другие Lisp-ы"]]]]
+
+      [:div
+       {:class "past-meetup clearfix"}
+       [:div
+        {:class "past-meetup-info"}
+        [:p {}
+         [:a {:href (url-for "emacs_elisp.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Emacs &amp; EmacsLisp"]]]]
+      
+      ]
+     ]
+
     [:section
 
      {:id "content"}
@@ -89,15 +126,14 @@
        "\n\t      ЛЕНТА\n\t      "
        [:div {:class "line"}]]
 
+      (let [news-post (first (posts-with-tag "news"))]
       [:div
        {:class "main-post"}
-       (:contents (first (posts-with-tag "news")))]
+       [:h2 (link-for (:title news-post) (:html-file-name news-post))]
+       (:contents news-post)])
 
-      [:iframe {:src (url-for "news.html"),
-                :seamless "seamless",
-                :width "520px",
-                ;; :height "200px",
-                :frameBorder "0"}]
+      [:br]
+      (inner-page "news.html" {:width "520px"})
       ]
 
      [:div
@@ -119,12 +155,12 @@
      [:div
       {:class "page-footer-button"}
       [:a
-       {:shape "rect", :href "http://clojure.by/rss.xml"}
+       {:shape "rect", :href (url-for "rss.xml")}
        [:img {:src "img/rss.png"}]]]]
     [:section
      {:class "copyright-info"}
      [:p {} [:strong {} "Clojure Enthusiasts Belarus"] ", 2013."]
-     [:p {} "\n            Created by\n          "]
+     [:p {} "\n            Created by Dmitry Bushenko (d.bushenko@gmail.com)\n          "]
      [:p {} "Some rights reserved (c)."]]]
 
    (for [js-file ["//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"

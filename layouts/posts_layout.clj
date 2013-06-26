@@ -73,7 +73,42 @@
         {:shape "rect",
          :class "past-meetup-more-link",
          :href (url-for "meetup.html")}
-        "Больше..."]]]]
+        "Больше..."]]]
+     [:div
+      {:class "tags"}
+      [:h3 {:align "center", :class "pm-header"} "Теги"]
+
+      [:div
+       {:class "past-meetup clearfix"}
+       [:div
+        {:class "past-meetup-info"}
+        [:p {}
+         [:a {:href (url-for "clojure_tips.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Clojure tips &amp; tricks"]]]]
+
+      [:div
+       {:class "past-meetup clearfix"}
+       [:div
+        {:class "past-meetup-info"}
+        [:p {}
+         [:a {:href (url-for "clojure_web.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Clojure &amp; Web"]]]]
+
+      [:div
+       {:class "past-meetup clearfix"}
+       [:div
+        {:class "past-meetup-info"}
+        [:p {}
+         [:a {:href (url-for "other_lisps.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Другие Lisp-ы"]]]]
+
+      [:div
+       {:class "past-meetup clearfix"}
+       [:div
+        {:class "past-meetup-info"}
+        [:p {}
+         [:a {:href (url-for "emacs_elisp.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Emacs &amp; EmacsLisp"]]]]
+      
+      ]
+
+     ]
     [:section
 
      {:id "content"}
@@ -82,12 +117,13 @@
       {:class "feed"}
       [:div
        {:class "feed-header"}
-       "\n\t      ЛЕНТА\n\t      "
+       "\n\t      ЗАПИСЬ\n\t      "
        [:div {:class "line"}]]
 
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+      [:h2 (post-title)]
       (post-content)
 
           "<div id=\"disqus_thread\"></div>
@@ -114,12 +150,12 @@
      [:div
       {:class "page-footer-button"}
       [:a
-       {:shape "rect", :href "http://clojure.by/rss.xml"}
+       {:shape "rect", :href (url-for "rss.xml")}
        [:img {:src "img/rss.png"}]]]]
     [:section
      {:class "copyright-info"}
      [:p {} [:strong {} "Clojure Enthusiasts Belarus"] ", 2013."]
-     [:p {} "\n            Created by\n          "]
+     [:p {} "\n            Created by Dmitry Bushenko (d.bushenko@gmail.com)\n          "]
      [:p {} "Some rights reserved (c)."]]]
 
 

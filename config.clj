@@ -1,5 +1,12 @@
 {:url-base ""
  :page-size 5
- :post-layout "default"
- ;;:tag2 "tags2" -- we may set layout name for any tag
+ :post-layout "posts_layout"
+ 
+ :rss-title "clojure.by"
+ :rss-link "http://clojure.by"
+ :rss-description "Clojure enthusiasts community"
+ :rss-count 1
+
+ ;; tags layouts
+ :news "news_layout"
  }
