@@ -30,14 +30,14 @@
        {:class "site-title"}
        [:a
         {:shape "rect", :href (url-for "index.html")}
-        "#clojure"
-        [:span {:class "by"} "by"]]]
+        [:span.clojure "#clojure"]
+        [:span.by "by"]]]
       [:h3 {:class "site-description"} "Clojure комьюнити"]]]]
    [:div
     {:id "main", :role "main"}
     [:aside
      {:id "widgets"}
-     [:div {} [:img {:style "margin-top:-100px;", :src "img/alien.png"}]]
+     [:div {} [:img {:id "alien", :src "img/alien.png"}]]
      [:div
       {:class "past-meetups"}
       [:h3 {:align "center", :class "pm-header"} "Прошедшие встречи"]
