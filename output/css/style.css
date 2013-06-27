@@ -43,8 +43,7 @@ body, button, input, select, textarea { font-family: 'PT Serif Caption', sans-se
  * Also: hot pink! (or customize the background color to match your design)
  */
 
-::-moz-selection { background: #fe57a1; color: #fff; text-shadow: none; }
-::selection { background: #fe57a1; color: #fff; text-shadow: none; }
+
 
 
 /* =============================================================================
@@ -277,7 +276,7 @@ a:hover {
 .site-title .by {
     color: #079e07; }
 .site-title .clojure {
-    color: #586bbf; }
+    color: #000; }
 
 #main {
     display: inline-block;
@@ -690,4 +689,9 @@ div.dsq-trackback-url {
   overflow-x: auto;
   overflow-y: hidden;
   height: auto;
+}
+
+.post_header {
+  color: #000;
+  text-decoration: none;
 }
