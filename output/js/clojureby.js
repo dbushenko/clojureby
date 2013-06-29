@@ -7,7 +7,7 @@ $(function() {
         var text = block.text();
         // Remove empty line at the end.
         if (text.charAt(text.length - 1) === "\n") {
-            text =  text.substring(0, text.length - 2);
+            text =  text.substring(0, text.length - 1);
         }
 
         CodeMirror(function(elt) {
