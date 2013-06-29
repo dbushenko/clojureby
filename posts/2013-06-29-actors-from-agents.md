@@ -105,8 +105,4 @@ pinger - Got pong message
 А вообще если действительно хочется задействовать акторов, то лучше воспользоваться готовыми библиотеками. Для JVM самой стильной, модной, молодёжной библиотекой является скаловская [Akka](http://akka.io/). Существуют обёртки над аккой для кложура: [akka-clojure](https://github.com/jasongustafson/akka-clojure) и [okku](https://github.com/gaverhae/okku), их и стоит посмотреть.
 
 
-
-
-
-
-
+Автор: Никита Белоглазов (nikelandjelo@gmail.com)

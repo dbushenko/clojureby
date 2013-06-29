@@ -15,89 +15,54 @@ Clojure enthusiasts community
 </description>
 <item>
 <link>
-2013-06-26-disassemble.html
+2013-06-29-actors-from-agents.html
 </link>
 <title>
-Байткод скомпилированных функций
+Акторы из агентов
 </title>
 <pubDate>
-Ср, 26 июн 2013 00:00:00 +0300
+Сб, 29 июн 2013 00:00:00 +0300
 </pubDate>
 <description>
-&lt;p&gt;В SLIME для Common Lisp есть классная фишка -- показать скомпилированный байткод. Поскольку выглядит он солидно, то его пихают и в книги, и в статьи, хотя пользы от него -- немного. У Clojure такой функциональности не было, и я решил добавить пару функций. Я сделал патч для nrepl.el, но примут его или нет -- не знаю, потому исходник функций привожу здесь.&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;common-lisp&quot;&gt;
-&amp;#40;defun nrepl-decompile &amp;#40;fn-name&amp;#41;
-  &amp;quot;Decompiles specified function into the java bytecode. Opens buffer &amp;#42;decompiled&amp;#42; with the result
-of decompilation, enables javap-mode on it.
-Input: fn-name in format 'my-namespace$my-function'. All dashes will be replaced with underscores,
-the dollar symbol will be escaped.&amp;quot;
-  &amp;#40;let&amp;#42; &amp;#40;&amp;#40;buf-name &amp;quot;&amp;#42;decompiled&amp;#42;&amp;quot;&amp;#41;
-	 &amp;#40;class-name
-	  &amp;#40;replace-regexp-in-string &amp;quot;-&amp;quot; &amp;quot;&amp;#95;&amp;quot; 
-				    &amp;#40;replace-regexp-in-string &amp;quot;\\$&amp;quot; &amp;quot;\\\\$&amp;quot; fn-name&amp;#41;&amp;#41;&amp;#41;
-	 &amp;#40;cmd &amp;#40;concat &amp;quot;javap -constants -v -c -classpath `lein classpath` &amp;quot; class-name&amp;#41;&amp;#41;
-	 &amp;#40;decompiled &amp;#40;shell-command-to-string cmd&amp;#41;&amp;#41;&amp;#41;
-    &amp;#40;with-current-buffer &amp;#40;get-buffer-create buf-name&amp;#41;
-      &amp;#40;point-min&amp;#41;
-      &amp;#40;insert decompiled&amp;#41;
-      &amp;#40;javap-mode&amp;#41;&amp;#41;
-    &amp;#40;display-buffer buf-name&amp;#41;&amp;#41;&amp;#41;
+&lt;h3&gt;Введение&lt;/h3&gt;В этом посте я хотел бы рассмотреть, как можно легко превратить кложурных агентов в примитивных акторов. Подробнее про &lt;a href='http://alexott.net/ru/clojure/clojure-intro/index.html#sec21'&gt;агентов&lt;/a&gt; и &lt;a href='http://habrahabr.ru/post/140368/'&gt;акторов&lt;/a&gt;. Меня всегда смущали агенты своей &quot;безмозглостью&quot;: они не имеют собственного поведения, они умеют только применять переданную функцию к текущему значению и сохранять полученный результат, как новое значение. Модель акторов является более сложной в реализации и логики, и работы c ними. Рич Хикки частично &lt;a href='https://groups.google.com/forum/#!msg/clojure/Kisk&amp;#95;-9dFjE/&amp;#95;2WxSxyd1SoJ'&gt;объясняет&lt;/a&gt;, почему он не выбрал модель акторов.&lt;p&gt;Как-то в скайпе зашёл разговор об акторах и агентах, и Андрей Жлобич подсказал, что если уж так сильно хочется, то в качестве значения в агенте можно хранить функцию обработки сообщений и получить таким образом &quot;мозговитых&quot; агентов - псевдоакторов. Я решил попробовать это реализовать.&lt;/p&gt;&lt;p&gt;Наши доморощенные акторы будут обладать следующими свойствами:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;акторы могут посылать друг другу сообщения;&lt;/li&gt;&lt;li&gt;акторы не имеют состояния (stateless);&lt;/li&gt;&lt;li&gt;акторы имеют ссылку на себя и на отправителя текущего сообщения;&lt;/li&gt;&lt;li&gt;отсутствуют древовидные структуры акторов: кто кого породил, кто отвечает за актор в случае ошибки и т.д.;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;По поводу последнего пункта: в агентах есть подобие такой функциональности: можно задать стратегию на случай, если при выполнении функции будет брошено исключение.&lt;/p&gt;&lt;h3&gt;Реализация&lt;/h3&gt;&lt;p&gt;Для начала опишем переменные, которые будут содержать ссылку на текущий актор и актор отправитель:&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;clojure&quot;&gt;
+&amp;#40;def &amp;#94;:dynamic &amp;#42;self&amp;#42;&amp;#41;
+&amp;#40;def &amp;#94;:dynamic &amp;#42;sender&amp;#42;&amp;#41;
+&lt;/pre&gt;&lt;p&gt;Наши акторы являются в общем-то агентами. В агентах в качестве значения будет храниться функция-обработчик сообщений. Реализуем функцию &lt;code&gt;process&lt;/code&gt;, которая будет передаваться агентам, данная функция будет применять функцию-обработчик к сообщению. Так же &lt;code&gt;process&lt;/code&gt; будет биндить переменные &lt;code&gt;&amp;#42;self&amp;#42;&lt;/code&gt; и &lt;code&gt;&amp;#42;sender&amp;#42;&lt;/code&gt; в нужные значения:&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;clojure&quot;&gt;
+&amp;#40;defn process &amp;#91;f self sender message&amp;#93;
+  &amp;#40;binding &amp;#91;&amp;#42;self&amp;#42; self
+            &amp;#42;sender&amp;#42; sender&amp;#93;
+    &amp;#40;f message&amp;#41; f&amp;#41;&amp;#41;
+&lt;/pre&gt;&lt;p&gt;Стоит отметить что функция &lt;code&gt;process&lt;/code&gt; возвращает &lt;code&gt;f&lt;/code&gt;. Это необходимо для того, чтобы значением агента осталась функция-обработчик.&lt;/p&gt;&lt;p&gt;Теперь реализуем функцию &lt;code&gt;tell&lt;/code&gt;, которая посылает актору сообщение:&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;clojure&quot;&gt;
+&amp;#40;defn tell &amp;#91;actor message&amp;#93;
+  &amp;#40;send actor process actor &amp;#42;self&amp;#42; message&amp;#41;&amp;#41;
+&lt;/pre&gt;&lt;p&gt;В этой функции приходится явно передавать в &lt;code&gt;process&lt;/code&gt; ссылку на актор-получатель (&lt;code&gt;actor&lt;/code&gt;) и себя (&lt;code&gt;&amp;#42;self&amp;#42;&lt;/code&gt;), чтобы принимающий актор мог корректно установить переменные &lt;code&gt;&amp;#42;self&amp;#42;&lt;/code&gt; и &lt;code&gt;&amp;#42;sender&amp;#42;&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;Теперь определим макрос, который будет создавать актора. Макрос просто создаёт агента с заданным именем и функцией-обработчиком в качестве значения. Так же я добавил в агент метаданные, содержащие имя актора:&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;clojure&quot;&gt;
+&amp;#40;defmacro defactor &amp;#91;name args &amp;amp; body&amp;#93;
+  `&amp;#40;def &amp;#126;name &amp;#40;agent &amp;#40;fn &amp;#126;args &amp;#126;@body&amp;#41;
+                     :meta {:name '&amp;#126;name}&amp;#41;&amp;#41;&amp;#41;
+&lt;/pre&gt;&lt;p&gt;Собственно всё, акторы готовы к использованию. Но я ещё добавил несколько утилитных функций для удобного логирования из агентов:&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;clojure&quot;&gt;
+&amp;#40;defn aname &amp;#91;actor&amp;#93;
+  &amp;#40;-&amp;gt; actor meta :name&amp;#41;&amp;#41;
 
-&amp;#40;defun nrepl-decompile-func &amp;#40;fn-name&amp;#41;
-  &amp;quot;Asks for the function name in the current namespace and decompiles it.&amp;quot;
-  &amp;#40;interactive &amp;quot;sFunction: &amp;quot;&amp;#41;
-  &amp;#40;nrepl-decompile &amp;#40;concat &amp;#40;nrepl-current-ns&amp;#41; &amp;quot;$&amp;quot; fn-name&amp;#41;&amp;#41;&amp;#41;
-
-&amp;#40;defun nrepl-decompile-ns-func &amp;#40;fn-name&amp;#41;
-  &amp;quot;Asks for the function name in a specific namespace and decompiles it.&amp;quot;
-  &amp;#40;interactive &amp;quot;sNamespace/function: &amp;quot;&amp;#41;
-  &amp;#40;nrepl-decompile &amp;#40;concat &amp;#40;replace-regexp-in-string &amp;quot;\\\/&amp;quot; &amp;quot;$&amp;quot; fn-name&amp;#41;&amp;#41;&amp;#41;&amp;#41;
-&lt;p&gt;
-&lt;/pre&gt;&lt;/p&gt;&lt;p&gt;Для корректной работы функции &lt;i&gt;nrepl-decompile&lt;/i&gt; необходимо, чтобы был установлен javap-mode-плагин, а для &lt;i&gt;nrepl-decompile-func&lt;/i&gt; -- запущенный nrepl. Тогда можно сделать M-x nrepl-decompile-func, ввести имя функции, и откроется буфер с java-байткодом.&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;java&quot;&gt;
-Classfile /home/dim/clojure.by/clj-site/target/classes/clj&amp;#95;site/core$print&amp;#95;usage.class
-  Last modified 25.06.2013; size 861 bytes
-  MD5 checksum 5558aba56207ba636949db9981123105
-  Compiled from &amp;quot;core.clj&amp;quot;
-public final class clj&amp;#95;site.core$print&amp;#95;usage extends clojure.lang.AFunction
-  SourceFile: &amp;quot;core.clj&amp;quot;
-  SourceDebugExtension: null
-  minor version: 0
-  major version: 49
-  flags: ACC&amp;#95;PUBLIC, ACC&amp;#95;FINAL, ACC&amp;#95;SUPER
-Constant pool:
-   #1 = Utf8               clj&amp;#95;site/core$print&amp;#95;usage
-   #2 = Class              #1             //  clj&amp;#95;site/core$print&amp;#95;usage
-   #3 = Utf8               clojure/lang/AFunction
-   #4 = Class              #3             //  clojure/lang/AFunction
-   #5 = Utf8               core.clj
-   #6 = Utf8               const&amp;#95;&amp;#95;0
-   #7 = Utf8               Lclojure/lang/Var;
-   #8 = Utf8               &amp;lt;clinit&amp;gt;
-   #9 = Utf8               &amp;#40;&amp;#41;V
-  #10 = Utf8               clojure.core
-  #11 = String             #10            //  clojure.core
-  #12 = Utf8               println
-  #13 = String             #12            //  println
-  ...
-{
-  public static final clojure.lang.Var const&amp;#95;&amp;#95;0;
-    flags: ACC&amp;#95;PUBLIC, ACC&amp;#95;STATIC, ACC&amp;#95;FINAL
-
-    ...
-
-  public clj&amp;#95;site.core$print&amp;#95;usage&amp;#40;&amp;#41;;
-    flags: ACC&amp;#95;PUBLIC
-    Code:
-      stack=1, locals=1, args&amp;#95;size=1
-         0: aload&amp;#95;0       
-         1: invokespecial #26                 // Method clojure/lang/AFunction.&amp;quot;&amp;lt;init&amp;gt;&amp;quot;:&amp;#40;&amp;#41;V
-         4: return        
-      LineNumberTable:
-        line 70: 0
-
-	...
-}
-&lt;p&gt;
-&lt;/pre&gt;  &lt;/p&gt;&lt;p&gt;Автор: Д.Бушенко (d.bushenko@gmail.com)&lt;/p&gt;
+&amp;#40;defn log &amp;#91;&amp;amp; args&amp;#93;
+  &amp;#40;apply println &amp;#40;aname &amp;#42;self&amp;#42;&amp;#41; &amp;quot;-&amp;quot; args&amp;#41;&amp;#41;
+&lt;/pre&gt;&lt;p&gt;Теперь приступим к тестированию. Создадим 2 актора: пингер и понгер. Понгер совсем прост. Всё, что он умеет - это принимать сообщения &lt;code&gt;:ping&lt;/code&gt; и отправлять ответ &lt;code&gt;:pong&lt;/code&gt; отправителю:&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;clojure&quot;&gt;
+&amp;#40;defactor ponger &amp;#91;message&amp;#93;
+  &amp;#40;when &amp;#40;= message :ping&amp;#41;
+    &amp;#40;log &amp;quot;Got ping from&amp;quot; &amp;#40;aname &amp;#42;sender&amp;#42;&amp;#41;&amp;#41;
+    &amp;#40;tell &amp;#42;sender&amp;#42; :pong&amp;#41;&amp;#41;&amp;#41;
+&lt;/pre&gt;&lt;p&gt;Пингер чуточку сложнее. Он уже умеет обрабатывать целых 2 сообщения: &lt;code&gt;:run&lt;/code&gt; и &lt;code&gt;:pong&lt;/code&gt;. Сообщение &lt;code&gt;:run&lt;/code&gt; заставит пингер отправить пинг сообщение понгеру, при сообщении &lt;code&gt;:pong&lt;/code&gt; оно будет просто залогировано:&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;clojure&quot;&gt;
+&amp;#40;defactor pinger &amp;#91;message&amp;#93;
+  &amp;#40;case message
+    :run &amp;#40;do &amp;#40;log &amp;quot;Send ping message&amp;quot;&amp;#41;
+             &amp;#40;tell ponger :ping&amp;#41;&amp;#41;
+    :pong &amp;#40;log &amp;quot;Got pong message&amp;quot;&amp;#41;&amp;#41;&amp;#41;
+&lt;/pre&gt;&lt;p&gt;Теперь запустим:&lt;/p&gt;&lt;pre class=&quot;code&quot; data-lang=&quot;clojure&quot;&gt;
+&amp;#40;tell pinger :run&amp;#41;
+&lt;/pre&gt;&lt;p&gt;Результат работы:&lt;/p&gt;&lt;pre&gt;
+pinger - Send ping message
+ponger - Got ping from pinger
+pinger - Got pong message
+&lt;/pre&gt;&lt;p&gt;&lt;a href='https://gist.github.com/nbeloglazov/5891789'&gt;Весь код&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;Заключение&lt;/h3&gt;&lt;p&gt;В первую очередь хочется отметить, что это всего лишь эксперимент и ничего серьёзного от него ожидать не стоит. В целом мне понравилось, как с помощью 15 строчек кода можно превратить агентов в почти акторов. Можно ещё делать много мелких улучшений, например добавить в акторы состояние: можно функцию-обработчик хранить в метаданных, а в качестве значения агента хранить состояние актора. Хочется ещё избавиться от глобальных динамических переменных &lt;code&gt;&amp;#42;self&amp;#42;&lt;/code&gt; и &lt;code&gt;&amp;#42;sender&amp;#42;&lt;/code&gt;, т.к. они грозят неприятными ошибками, если будут создаваться функции-callback'и внутри актора, но я не придумал, как можно это сделать, кроме явной их передачи в функцию-обработчик.&lt;/p&gt;&lt;p&gt;А вообще если действительно хочется задействовать акторов, то лучше воспользоваться готовыми библиотеками. Для JVM самой стильной, модной, молодёжной библиотекой является скаловская &lt;a href='http://akka.io/'&gt;Akka&lt;/a&gt;. Существуют обёртки над аккой для кложура: &lt;a href='https://github.com/jasongustafson/akka-clojure'&gt;akka-clojure&lt;/a&gt; и &lt;a href='https://github.com/gaverhae/okku'&gt;okku&lt;/a&gt;, их и стоит посмотреть.&lt;/p&gt;&lt;p&gt;Автор: Никита Белоглазов (nikelandjelo@gmail.com)&lt;/p&gt;
 </description>
 </item>
 </channel>
