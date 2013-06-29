@@ -125,6 +125,8 @@
 
       [:h2 (post-title)]
       (post-content)
+      (when-let [author (:author *post*)]
+        [:p.author "Автор: " author])
 
           "<div id=\"disqus_thread\"></div>
     <script type=\"text/javascript\">

@@ -127,11 +127,13 @@
        [:div {:class "line"}]]
 
       (let [news-post (first (posts-with-tag "news"))]
-      [:div
-       {:class "main-post"}
-       [:h2  [:a {:class "post_header", :href (url-for (:html-file-name news-post))}
-              (:title news-post)]]
-       (:contents news-post)])
+        [:div
+         {:class "main-post"}
+         [:h2  [:a {:class "post_header", :href (url-for (:html-file-name news-post))}
+                (:title news-post)]]
+         (:contents news-post)
+         (when-let [author (:author news-post)]
+           [:p.author "Автор: " author])])
 
       [:br]
       [:h3 "Предыдущие записи"]
