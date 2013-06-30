@@ -125,12 +125,8 @@
 
       [:h2 (post-title)]
       (post-content)
-<<<<<<< HEAD
-      [:p [:strong "Автор: "] (:author (current-post))]
-=======
       (when-let [author (:author *post*)]
         [:p.author "Автор: " author])
->>>>>>> 5d4bd4d9ad4cfd4bae735947311339a1431a140f
 
           "<div id=\"disqus_thread\"></div>
     <script type=\"text/javascript\">
