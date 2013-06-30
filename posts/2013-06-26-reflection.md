@@ -1,6 +1,7 @@
 #title: Как посмотреть список методов java-объекта
 #tags: clojure_tips news
 #date: 2013-06-26
+#author: Д.Бушенко (d.bushenko@gmail.com)
 
 Вообще стандартных средств для этого нет. Но мы же можем использовать Reflection. Например, так:
 
@@ -25,6 +26,4 @@ Return Type:  java.lang.String
 Method Name:  hashCode   
 Parameters:  []   
 Return Type:  int    
-
-Автор: Д.Бушенко (d.bushenko@gmail.com)
    

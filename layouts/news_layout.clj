@@ -8,7 +8,7 @@
    (doall (map #(vector :div (parent-link-for (str (:date %) "&nbsp;" (:title %))
                                               (:html-file-name %))
                         [:br])
-               (next (page-posts))))
+               (page-posts)))
 
    [:br]
 

@@ -125,6 +125,7 @@
 
       [:h2 (post-title)]
       (post-content)
+      [:p [:strong "Автор: "] (:author (current-post))]
 
           "<div id=\"disqus_thread\"></div>
     <script type=\"text/javascript\">

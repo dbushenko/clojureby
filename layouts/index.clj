@@ -131,7 +131,9 @@
        {:class "main-post"}
        [:h2  [:a {:class "post_header", :href (url-for (:html-file-name news-post))}
               (:title news-post)]]
-       (:contents news-post)])
+       (:contents news-post)
+       [:br]
+       [:p [:strong "Автор: "] (:author news-post)]])
 
       [:br]
       [:h3 "Предыдущие записи"]
