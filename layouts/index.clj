@@ -127,6 +127,7 @@
        [:div {:class "line"}]]
 
       (let [news-post (first (posts-with-tag "news"))]
+<<<<<<< HEAD
       [:div
        {:class "main-post"}
        [:h2  [:a {:class "post_header", :href (url-for (:html-file-name news-post))}
@@ -134,6 +135,15 @@
        (:contents news-post)
        [:br]
        [:p [:strong "Автор: "] (:author news-post)]])
+=======
+        [:div
+         {:class "main-post"}
+         [:h2  [:a {:class "post_header", :href (url-for (:html-file-name news-post))}
+                (:title news-post)]]
+         (:contents news-post)
+         (when-let [author (:author news-post)]
+           [:p.author "Автор: " author])])
+>>>>>>> 5d4bd4d9ad4cfd4bae735947311339a1431a140f
 
       [:br]
       [:h3 "Предыдущие записи"]
