@@ -2,6 +2,8 @@
  {}
  [:head
   {}
+  [:meta {:http-equiv "CACHE-CONTROL" :content "NO-CACHE"}]
+  [:meta {:http-equiv "EXPIRES" :content "0"}]
   [:meta {:http-equiv "Content-Type", :content "text/html; charset=UTF-8"}]
   [:title {} "Clojure Enthusiasts Belarus - Clojure в Беларуси"]
   [:meta
@@ -128,7 +130,7 @@
       (when-let [author (:author *post*)]
         [:p.author "Автор: " author])
 
-          "<div id=\"disqus_thread\"></div>
+      "<div id=\"disqus_thread\"></div>
     <script type=\"text/javascript\">
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
         var disqus_shortname = 'clojureby'; // required: replace example with your forum shortname

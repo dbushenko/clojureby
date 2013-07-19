@@ -2,6 +2,8 @@
  {}
  [:head
   {}
+  [:meta {:http-equiv "CACHE-CONTROL" :content "NO-CACHE"}]
+  [:meta {:http-equiv "EXPIRES" :content "0"}]
   [:meta {:http-equiv "Content-Type", :content "text/html; charset=UTF-8"}]
   [:title {} "Clojure Enthusiasts Belarus - Clojure в Беларуси"]
   [:meta
