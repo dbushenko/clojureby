@@ -137,7 +137,7 @@
 
       [:br]
       [:h3 "Предыдущие записи"]
-      (inner-page "news.html" {:width "520px"})
+      (inner-page "news.html" {:width "520px", :height "220px"})
       ]
 
      [:div
