@@ -1,6 +1,6 @@
 #title: Распознавание японского кроссворда. Часть 1: Знакомим OpenCV с Clojure.
 #tags: clojure_tips news
-#date: 2013-07-18 18:00
+#date: 2013-07-18
 #author: Никита Белоглазов (nikelandjelo@gmail.com)
 
 ### Введение

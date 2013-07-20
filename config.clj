@@ -1,4 +1,4 @@
-{:url-base "www.clojure.by/"
+{:url-base "http://www.clojure.by/"
  :page-size 5
  :post-layout "posts_layout"
  
