@@ -15,6 +15,7 @@
     :content
     "Community of Clojure programming language users in Belarus. Коммьюнити пользователей языка программирования Clojure в Беларуси (Минск)"}]
   [:meta {:name "viewport", :content "width=device-width,initial-scale=1"}]
+  [:link {:rel "alternate" :type "application/rss+xml" :title "RSS" :href (url-for "rss.xml")}]
   (for [css-file ["style.css" "codemirror.css"]]
     [:link
      {:rel "stylesheet", :type "text/css", :media "all", :href (str "css/" css-file)}])]
