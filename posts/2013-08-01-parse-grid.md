@@ -5,7 +5,7 @@
 
 ### Серия
 
-[Часть 1: Знакомим OpenCV с Clojure.](http://www.clojure.by/2013-07-18-opencv-from-clojure.html)
+[Часть 1: Знакомим OpenCV с Clojure.](/2013-07-18-opencv-from-clojure.html)
 
 ### Введение
 
