@@ -139,8 +139,8 @@
 
        [:br]
 
-       (if (page-next) (link-for "&lt;&lt; Next &nbsp;&nbsp; " (page-next)))
-       (if (page-prev) (link-for "Prev &gt;&gt;" (page-prev)))
+       (if (page-next) (link-for "&lt;&lt; Вперёд &nbsp;&nbsp; " (page-next)))
+       (if (page-prev) (link-for "Назад &gt;&gt;" (page-prev)))
        ]
 
       ]
