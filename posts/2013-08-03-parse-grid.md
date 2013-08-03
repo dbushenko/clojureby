@@ -1,6 +1,6 @@
 #title: Распознавание японского кроссворда. Часть 2: Распознаём сетку.
 #tags: clojure_tips news
-#date: 2013-08-01
+#date: 2013-08-03
 #author: Никита Белоглазов (nikelandjelo@gmail.com)
 
 ### Серия
