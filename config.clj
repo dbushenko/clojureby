@@ -1,5 +1,6 @@
 {:url-base "http://www.clojure.by/"
- :page-size 5
+ :page-size 20
+ :news-size 5
  :post-layout "posts_layout"
  
  :rss-title "clojure.by"
