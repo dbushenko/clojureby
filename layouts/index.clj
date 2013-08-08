@@ -110,6 +110,13 @@
         {:class "past-meetup-info"}
         [:p {}
          [:a {:href (url-for "emacs_elisp.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Emacs &amp; EmacsLisp"]]]]
+
+      [:div
+       {:class "past-meetup clearfix"}
+       [:div
+        {:class "past-meetup-info"}
+        [:p {}
+         [:a {:href (url-for "emacscasts.html"), :class "past-meetup-more-link", :style "color:white;text-decoration: none; "} "Emacs-скринкасты"]]]]
       
       ]
      ]
