@@ -1,5 +1,5 @@
 #title: popup-switcher - переключение буферов и навигация по функциям, используя TUI-меню
-#tags: emacs extension tui
+#tags: news emacs_elisp
 #date: 2013-11-05
 #author: Kostafey (kostafey@gmail.com)
 
